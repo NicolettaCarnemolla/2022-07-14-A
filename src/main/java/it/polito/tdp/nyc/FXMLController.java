@@ -2,6 +2,8 @@ package it.polito.tdp.nyc;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import it.polito.tdp.nyc.model.Archi;
 import it.polito.tdp.nyc.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -32,16 +34,16 @@ public class FXMLController {
     private Button btnCreaLista; // Value injected by FXMLLoader
 
     @FXML // fx:id="clPeso"
-    private TableColumn<?, ?> clPeso; // Value injected by FXMLLoader
+    private TableColumn<Integer,Integer> clPeso; // Value injected by FXMLLoader
 
     @FXML // fx:id="clV1"
-    private TableColumn<?, ?> clV1; // Value injected by FXMLLoader
+    private TableColumn<String, Integer> clV1; // Value injected by FXMLLoader
 
     @FXML // fx:id="clV2"
-    private TableColumn<?, ?> clV2; // Value injected by FXMLLoader
+    private TableColumn<String,Integer> clV2; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbBorough"
-    private ComboBox<?> cmbBorough; // Value injected by FXMLLoader
+    private ComboBox<String> cmbBorough; // Value injected by FXMLLoader
 
     @FXML // fx:id="tblArchi"
     private TableView<?> tblArchi; // Value injected by FXMLLoader
@@ -57,13 +59,20 @@ public class FXMLController {
 
     @FXML
     void doAnalisiArchi(ActionEvent event) {
+    	for(Archi a : model.AnalizzaArchi()) {
+    		this.txtResult.appendText(a.getC1() + ", "+ a.getC2()+", "+ a.getPeso() + "\n");
+    	}
+    	
     	
 
     }
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
+    	String borough = this.cmbBorough.getValue();
     	
+    	model.creaGrafo(borough);
+    	this.txtResult.setText("Grafo Creato! \n");
     }
 
     @FXML
@@ -85,11 +94,12 @@ public class FXMLController {
         assert txtProb != null : "fx:id=\"txtProb\" was not injected: check your FXML file 'Scene.fxml'.";
         assert txtResult != null : "fx:id=\"txtResult\" was not injected: check your FXML file 'Scene.fxml'.";
 
-        
     }
     
     public void setModel(Model model) {
     	this.model = model;
+    	//Primo Punto:
+        this.cmbBorough.getItems().addAll(model.getallBorough());
     }
 
 }
